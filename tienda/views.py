@@ -19,6 +19,14 @@ def finalizar_compra(request):
     if not carrito:
         return redirect('inicio')
 
+    # Verificar stock ANTES de crear la orden
+    for item in carrito.values():
+        producto = Producto.objects.get(id=item["id"])
+
+        if item["cantidad"] > producto.stock:
+            messages.error(request, f"Stock insuficiente para {producto.nombre}.")
+            return redirect('ver_carrito')
+
     # Calcular total
     total = sum(item["precio"] * item["cantidad"] for item in carrito.values())
 
@@ -30,23 +38,30 @@ def finalizar_compra(request):
 
     cantidad_total = 0
 
-    # Crear los items de la orden
+    # Crear los items y descontar inventario
     for item in carrito.values():
+        producto = Producto.objects.get(id=item["id"])
+
         OrdenItem.objects.create(
             orden=orden,
-            producto_id=item["id"],
+            producto=producto,
             cantidad=item["cantidad"]
         )
+
+        # Descontar inventario
+        producto.stock -= item["cantidad"]
+        producto.save()
+
         cantidad_total += item["cantidad"]
 
     # Vaciar carrito
     request.session['carrito'] = {}
 
-    # Mostrar página de compra exitosa
     return render(request, "tienda/compra_exitosa.html", {
         "orden": orden,
         "cantidad_total": cantidad_total
     })
+
 
 
 # ---------------------------
@@ -60,9 +75,25 @@ def ver_carrito(request):
     return render(request, 'tienda/carrito.html', {'carrito': carrito, 'total': total})
 
 
+from django.contrib import messages
+
 def agregar_al_carrito(request, producto_id):
     carrito = request.session.get('carrito', {})
     producto = get_object_or_404(Producto, id=producto_id)
+
+    # ----------------------------
+    # VALIDACIÓN DE STOCK
+    # ----------------------------
+    # Cantidad actual en carrito
+    cantidad_actual = carrito.get(str(producto_id), {}).get('cantidad', 0)
+
+    # Si ya no hay stock disponible
+    if cantidad_actual >= producto.stock:
+        messages.error(request, "❌ No hay suficiente stock disponible.")
+        return redirect('detalle_producto', producto_id=producto_id)
+    # ----------------------------
+
+    # Si hay stock, añadir al carrito
     if str(producto_id) in carrito:
         carrito[str(producto_id)]['cantidad'] += 1
     else:
@@ -72,8 +103,12 @@ def agregar_al_carrito(request, producto_id):
             'cantidad': 1,
             'id': producto_id
         }
+
     request.session['carrito'] = carrito
-    return redirect('inicio')
+    messages.success(request, "✔ Producto agregado al carrito.")
+    return redirect('detalle_producto', producto_id=producto_id)
+
+
 
 
 def vaciar_carrito(request):

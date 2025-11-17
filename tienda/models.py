@@ -11,9 +11,11 @@ class Producto(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     descripcion = models.TextField(blank=True)
     imagen_principal = models.ImageField(upload_to="productos/")
+    stock = models.PositiveIntegerField(default=0)  # 👈 NUEVO
 
     def __str__(self):
         return self.nombre
+
 
 
 # -----------------------
