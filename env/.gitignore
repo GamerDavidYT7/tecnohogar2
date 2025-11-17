@@ -8,6 +8,7 @@ __pycache__/
 
 # Configuración
 *.sqlite3
+db.sqlite3
 
 # Archivos estáticos
 staticfiles/
