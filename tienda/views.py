@@ -133,9 +133,6 @@ def agregar_al_carrito(request, producto_id):
     carrito = request.session.get('carrito', {})
     producto = get_object_or_404(Producto, id=producto_id)
 
-    # ----------------------------
-    # VALIDACIÓN DE STOCK
-    # ----------------------------
     # Cantidad actual en carrito
     cantidad_actual = carrito.get(str(producto_id), {}).get('cantidad', 0)
 
@@ -143,7 +140,6 @@ def agregar_al_carrito(request, producto_id):
     if cantidad_actual >= producto.stock:
         messages.error(request, "❌ No hay suficiente stock disponible.")
         return redirect('detalle_producto', producto_id=producto_id)
-    # ----------------------------
 
     # Si hay stock, añadir al carrito
     if str(producto_id) in carrito:
@@ -158,7 +154,10 @@ def agregar_al_carrito(request, producto_id):
 
     request.session['carrito'] = carrito
     messages.success(request, "✔ Producto agregado al carrito.")
-    return redirect('detalle_producto', producto_id=producto_id)
+
+    # Redirigir a la misma página desde donde vino (preferible)
+    return redirect(request.META.get('HTTP_REFERER', 'inicio'))
+
 
 
 
