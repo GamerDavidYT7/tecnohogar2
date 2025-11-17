@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Pagar Orden #{{ orden.id }}</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f7f9fb;padding:30px}
+    .card{max-width:480px;margin:0 auto;background:#fff;padding:22px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+    h1{font-size:20px;color:#222;margin-bottom:10px}
+    label{display:block;margin-top:10px;font-size:14px;color:#333}
+    input[type=text], input[type=number]{width:100%;padding:10px;margin-top:6px;border:1px solid #ddd;border-radius:6px}
+    .btn{display:inline-block;margin-top:16px;background:#0078D7;color:#fff;padding:10px 14px;border-radius:6px;text-decoration:none;border:none;cursor:pointer}
+    .note{font-size:13px;color:#666;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Pagar Orden #{{ orden.id }}</h1>
+    <p class="note">Total a pagar: <strong>${{ orden.total }}</strong></p>
+
+    <form method="post" action="{% url 'procesar_pago' orden.id %}">
+      {% csrf_token %}
+      <label>Nombre en la tarjeta</label>
+      <input type="text" name="nombre" required>
+
+      <label>Número de tarjeta (demo)</label>
+      <input type="text" name="tarjeta" placeholder="XXXX XXXX XXXX 4242" required>
+
+      <label>Mes</label>
+      <input type="text" name="mes" placeholder="MM" required>
+
+      <label>Año</label>
+      <input type="text" name="ano" placeholder="AAAA" required>
+
+      <label>CVV</label>
+      <input type="text" name="cvv" placeholder="123" required>
+
+      <button class="btn" type="submit">Pagar ahora</button>
+    </form>
+
+    <p class="note">Para simular éxito en esta demo, ingresa cualquier tarjeta que termine en <strong>4242</strong> (ej. 4242424242424242).</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil - TecnoHogar</title>
+
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #0003; }
+        h1 { color: #0078D7; text-align: center; }
+        .info-box { margin-top: 20px; background: #eef5ff; padding: 15px; border-radius: 10px; }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #0078D7;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .btn:hover { background: #005fa3; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #ccc; text-align: center; }
+        th { background: #0078D7; color: white; }
+        .delete-btn { background: red; color:white; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; margin-left:5px; }
+        .delete-btn:hover { background: darkred; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>👤 Mi Perfil</h1>
+
+    <div class="info-box">
+        <h3>Información del usuario</h3>
+        <p><strong>Usuario:</strong> {{ usuario.username }}</p>
+        <p><strong>Email:</strong> {{ usuario.email }}</p>
+        <p><strong>Fecha de registro:</strong> {{ usuario.date_joined|date:"d/m/Y" }}</p>
+
+        <a class="btn" href="{% url 'inicio' %}">Volver a tienda</a>
+
+        <!-- Botón eliminar cuenta seguro -->
+        <form method="post" action="{% url 'eliminar_cuenta' %}" style="display:inline;">
+            {% csrf_token %}
+            <a class="btn delete-btn" href="{% url 'eliminar_cuenta' %}">❌ Eliminar cuenta</a>
+
+        </form>
+    </div>
+
+    <h2 style="margin-top:30px;">📦 Historial de compras</h2>
+
+    {% if ordenes %}
+        <table>
+            <tr>
+                <th>ID Orden</th>
+                <th>Fecha</th>
+                <th>Total</th>
+            </tr>
+            {% for orden in ordenes %}
+            <tr>
+                <td>#{{ orden.id }}</td>
+                <td>{{ orden.fecha|date:"d/m/Y H:i" }}</td>
+                <td>${{ orden.total }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No has realizado compras aún.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+

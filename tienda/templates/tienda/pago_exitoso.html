@@ -1,0 +1,26 @@
+<!-- tienda/templates/tienda/pago_exitoso.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Pago exitoso</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f7f9fb;padding:30px}
+    .card{max-width:600px;margin:0 auto;background:#fff;padding:28px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+    h1{color:#28a745}
+    .muted{color:#666}
+    .btn{display:inline-block;margin-top:16px;background:#0078D7;color:#fff;padding:10px 14px;border-radius:6px;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Pago aprobado ✔</h1>
+    <p>Orden: <strong>#{{ orden.id }}</strong></p>
+    <p>Monto: <strong>${{ pago.monto }}</strong></p>
+    <p>Transaction ID: <strong>{{ pago.transaction_id }}</strong></p>
+    <p class="muted">Gracias por tu compra. Tu orden ha sido marcada como pagada.</p>
+
+    <a class="btn" href="{% url 'inicio' %}">Volver a la tienda</a>
+  </div>
+</body>
+</html>

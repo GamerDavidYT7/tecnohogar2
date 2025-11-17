@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Compra Exitosa - TecnoHogar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef3f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contenedor {
+            background: white;
+            max-width: 520px;
+            margin: 60px auto;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            text-align: center;
+            animation: aparecer 0.6s ease-out;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icono-exito {
+            font-size: 70px;
+            color: #28a745;
+            margin-bottom: 10px;
+            animation: pop 0.8s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #28a745;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .mensaje {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 17px;
+            margin: 8px 0;
+        }
+
+        .detalle-compra {
+            text-align: left;
+            margin: 25px 0;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+        }
+
+        .detalle-compra h3 {
+            margin-bottom: 12px;
+            color: #0078D7;
+        }
+
+        .detalle-compra ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .detalle-compra li {
+            padding: 10px 0;
+            font-size: 16px;
+            border-bottom: 1px dashed #cfcfcf;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 22px;
+            margin-top: 10px;
+            color: #222;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 28px;
+            padding: 12px 28px;
+            background-color: #0078D7;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            background-color: #005ea0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <!-- Ícono animado -->
+    <div class="icono-exito">✔</div>
+
+    <h1>¡Compra realizada con éxito!</h1>
+
+    <p class="mensaje">Gracias por confiar en <strong>TecnoHogar</strong>. Tu pedido está siendo procesado.</p>
+
+    <p><strong>Número de orden:</strong> {{ orden.id }}</p>
+    <p><strong>Total de productos:</strong> {{ cantidad_total }}</p>
+
+    <div class="detalle-compra">
+        <h3>Detalles de tu compra:</h3>
+        <ul>
+            {% for item in orden.ordenitem_set.all %}
+                <li>{{ item.producto.nombre }} x {{ item.cantidad }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <p class="total">Total pagado: ${{ orden.total }}</p>
+
+    <a href="{% url 'inicio' %}">Volver a la tienda</a>
+</div>
+
+</body>
+</html>
+ 

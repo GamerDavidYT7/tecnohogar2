@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito - TecnoHogar</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f8f8; padding: 20px; }
+        h1 { text-align: center; color: #0078D7; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        th { background-color: #0078D7; color: white; }
+        .total { text-align: right; margin-top: 20px; font-weight: bold; }
+
+        .btn { 
+            text-decoration: none; 
+            background-color: #0078D7; 
+            color: white; 
+            padding: 8px 12px; 
+            border-radius: 5px; 
+            margin-right: 10px;
+        }
+        .btn:hover { background-color: #005ea0; }
+
+        /* Flex container para botones */
+        .botones {
+            display: flex;
+            gap: 10px; /* espacio entre botones */
+            margin-top: 20px;
+        }
+
+        .botones form {
+            margin: 0; /* elimina margen por defecto */
+        }
+    </style>
+</head>
+<body>
+    <h1>🛍️ Carrito de compras</h1>
+
+    {% if carrito %}
+    <table>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Subtotal</th>
+            <th>Acción</th>
+        </tr>
+        {% for id, item in carrito.items %}
+        <tr>
+            <td>{{ item.nombre }}</td>
+            <td>{{ item.cantidad }}</td>
+            <td>${{ item.precio }}</td>
+            <td>${{ item.subtotal }}</td>
+            <td>
+                <a class="btn" href="{% url 'eliminar_item' item.id %}">Eliminar 1</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p class="total">Total: ${{ total }}</p>
+
+    <div class="botones">
+        <a href="{% url 'vaciar_carrito' %}" class="btn">Vaciar carrito</a>
+        <a href="{% url 'inicio' %}" class="btn">Seguir comprando</a>
+
+        <form method="POST" action="{% url 'finalizar_compra' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn">Finalizar compra</button>
+</form>
+
+
+    </div>
+
+    {% else %}
+        <p>No hay productos en el carrito.</p>
+        <a href="{% url 'inicio' %}" class="btn">Volver a la tienda</a>
+    {% endif %}
+</body>
+</html>
+ 

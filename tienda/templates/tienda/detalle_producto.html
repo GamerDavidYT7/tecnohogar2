@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ producto.nombre }}</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .producto { display: flex; gap: 20px; margin-bottom: 30px; }
+        img { width: 300px; border-radius: 10px; }
+        .resena { background: #f1f1f1; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        form textarea { width: 100%; height: 80px; }
+        form input, form select { padding: 8px; }
+        form button { padding: 10px 15px; background: green; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-volver {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #4CAF50; /* Verde bonito */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-volver:hover {
+    background-color: #45a049;
+    transform: translateX(-3px);
+}
+    </style>
+</head>
+<body>
+
+    <a class="btn-volver" href="{% url 'inicio' %}">⬅ Volver</a>
+
+    <div class="producto">
+        <img src="{{ producto.imagen_principal.url }}" alt="{{ producto.nombre }}">
+        <div>
+            <h1>{{ producto.nombre }}</h1>
+            <p>{{ producto.descripcion }}</p>
+            <h3>Precio: ${{ producto.precio }}</h3>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Reseñas</h2>
+
+    {% for r in resenas %}
+        <div class="resena">
+            <strong>{{ r.usuario.username }} - {{ r.calificacion }}⭐</strong>
+            <p>{{ r.contenido }}</p>
+            <small>{{ r.fecha }}</small>
+        </div>
+    {% empty %}
+        <p>No hay reseñas todavía.</p>
+    {% endfor %}
+
+    <hr>
+
+    {% if user.is_authenticated %}
+
+        <h3>Agregar reseña</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label>Calificación:</label>
+            <select name="calificacion">
+                <option value="5">5 ⭐</option>
+                <option value="4">4 ⭐</option>
+                <option value="3">3 ⭐</option>
+                <option value="2">2 ⭐</option>
+                <option value="1">1 ⭐</option>
+            </select>
+
+            <br><br>
+
+            <label>Comentario:</label><br>
+            <textarea name="contenido"></textarea>
+
+            <br><br>
+
+            <button type="submit">Enviar reseña</button>
+        </form>
+
+    {% else %}
+        <p><a href="{% url 'login' %}">Inicia sesión</a> para dejar una reseña.</p>
+    {% endif %}
+
+</body>
+</html>
