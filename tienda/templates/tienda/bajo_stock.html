@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Productos con stock bajo</h1>
+
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Stock</th>
+    </tr>
+    {% for producto in productos %}
+    <tr>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.stock }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">No hay productos con stock bajo.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+    
+</body>
+</html>

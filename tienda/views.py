@@ -11,44 +11,82 @@ import uuid
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
+
+
+
+@login_required  # solo usuarios logueados pueden ver esto
+def productos_bajo_stock(request):
+    if not request.user.is_staff:
+        return redirect('inicio')  # si no es admin, lo manda al inicio
+
+    productos = Producto.objects.filter(stock__lte=5)  # stock bajo
+    return render(request, 'tienda/bajo_stock.html', {'productos': productos})
+
+# tienda/views.py (nuevo o editar inicio)
+def inicio(request):
+    qs = Producto.objects.all()
+    q = request.GET.get('q')
+    cat = request.GET.get('categoria')
+    minp = request.GET.get('min_price')
+    maxp = request.GET.get('max_price')
+
+    if q:
+        qs = qs.filter(nombre__icontains=q)
+    if cat:
+        qs = qs.filter(categoria__iexact=cat)
+
+    try:
+        minp_val = float(minp) if minp else None
+        maxp_val = float(maxp) if maxp else None
+    except ValueError:
+        minp_val = maxp_val = None
+
+    if minp_val is not None:
+        qs = qs.filter(precio__gte=minp_val)
+    if maxp_val is not None:
+        qs = qs.filter(precio__lte=maxp_val)
+
+    categorias = Producto.objects.values_list('categoria', flat=True).distinct()
+    return render(request, 'tienda/inicio.html', {'productos': qs, 'categorias': categorias})
+
+
+
+
+
+
 @login_required
 def finalizar_compra(request):
 
     carrito = request.session.get('carrito', {})
-
     if not carrito:
+        messages.warning(request, "Tu carrito está vacío.")
         return redirect('inicio')
 
-    # Verificar stock ANTES de crear la orden
+    # Validar stock primero
     for item in carrito.values():
-        producto = Producto.objects.get(id=item["id"])
-
-        if item["cantidad"] > producto.stock:
-            messages.error(request, f"Stock insuficiente para {producto.nombre}.")
+        producto = get_object_or_404(Producto, id=item['id'])
+        if item['cantidad'] > producto.stock:
+            messages.error(request, f"No hay suficientes unidades de {producto.nombre} (disponibles: {producto.stock}).")
             return redirect('ver_carrito')
 
     # Calcular total
     total = sum(item["precio"] * item["cantidad"] for item in carrito.values())
 
     # Crear orden
-    orden = Orden.objects.create(
-        usuario=request.user,
-        total=total
-    )
+    orden = Orden.objects.create(usuario=request.user, total=total)
 
     cantidad_total = 0
-
-    # Crear los items y descontar inventario
     for item in carrito.values():
-        producto = Producto.objects.get(id=item["id"])
+        producto = get_object_or_404(Producto, id=item["id"])
 
+        # Crear OrdenItem
         OrdenItem.objects.create(
             orden=orden,
             producto=producto,
             cantidad=item["cantidad"]
         )
 
-        # Descontar inventario
+        # RESTAR stock y guardar
         producto.stock -= item["cantidad"]
         producto.save()
 
@@ -57,10 +95,24 @@ def finalizar_compra(request):
     # Vaciar carrito
     request.session['carrito'] = {}
 
+    # Notificar al admin (ver sección 6)
+    from django.core.mail import send_mail
+    try:
+        send_mail(
+            subject=f'Nueva orden #{orden.id}',
+            message=f'Nueva orden #{orden.id} por {request.user.username}. Total: {orden.total}',
+            from_email=None,                        # usa DEFAULT_FROM_EMAIL o None para backend dev
+            recipient_list=[settings.DEFAULT_FROM_EMAIL],  # o admin list
+            fail_silently=True,
+        )
+    except Exception:
+        pass
+
     return render(request, "tienda/compra_exitosa.html", {
         "orden": orden,
         "cantidad_total": cantidad_total
     })
+
 
 
 
@@ -227,13 +279,5 @@ def procesar_pago(request, orden_id):
     orden.save()
     request.session['carrito'] = {}
     return render(request, 'tienda/pago_exitoso.html', {'orden': orden, 'pago': pago})
-
-
-# ---------------------------
-# INICIO
-# ---------------------------
-def inicio(request):
-    productos = Producto.objects.all()
-    return render(request, 'tienda/inicio.html', {'productos': productos})
 
 

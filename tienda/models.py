@@ -6,15 +6,22 @@ import uuid
 # -----------------------
 # MODELO PRODUCTO
 # -----------------------
+# tienda/models.py (añadir/editar)
+from django.db import models
+from django.contrib.auth.models import User
+
 class Producto(models.Model):
     nombre = models.CharField(max_length=150)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     descripcion = models.TextField(blank=True)
-    imagen_principal = models.ImageField(upload_to="productos/")
-    stock = models.PositiveIntegerField(default=0)  # 👈 NUEVO
+    imagen_principal = models.ImageField(upload_to="productos/", null=True, blank=True)
+    stock = models.PositiveIntegerField(default=0)                    # <-- stock
+    categoria = models.CharField(max_length=100, blank=True)         # <-- opcional
+    especificaciones = models.TextField(blank=True)                  # <-- detalles técnicos
 
     def __str__(self):
         return self.nombre
+
 
 
 
