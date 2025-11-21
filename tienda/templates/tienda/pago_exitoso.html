@@ -1,10 +1,28 @@
 <!-- tienda/templates/tienda/pago_exitoso.html -->
 <!DOCTYPE html>
+{% load static %}
 <html lang="es">
 <head>
+  <link rel="stylesheet" href="{% static 'css/common.css' %}">
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pago exitoso</title>
   <style>
+    /* Ejemplo: para pantallas menores a 600px */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  nav {
+    display: block;
+  }
+}
+
     body{font-family:Arial,Helvetica,sans-serif;background:#f7f9fb;padding:30px}
     .card{max-width:600px;margin:0 auto;background:#fff;padding:28px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
     h1{color:#28a745}

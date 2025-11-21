@@ -7,3 +7,7 @@ class TiendaConfig(AppConfig):
     def ready(self):
         # Importamos signals aquí, cuando los modelos ya están cargados
         import tienda.signals
+
+class UsuariosConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'usuarios'

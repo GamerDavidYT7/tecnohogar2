@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Reseña - {{ producto.nombre }}</title>
@@ -12,6 +13,28 @@
           rel="stylesheet">
 
     <style>
+        /* Ejemplo: para pantallas menores a 600px */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  nav {
+    display: block;
+  }
+}
+
+img {
+  max-width: 100%;   /* La imagen nunca será más ancha que su contenedor */
+  height: auto;      /* Mantiene la proporción original */
+  display: block;    /* Evita pequeños espacios debajo de la imagen */
+}
+
+
         body {
             background: #f5f5f5;
         }

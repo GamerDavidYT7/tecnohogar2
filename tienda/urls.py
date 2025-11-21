@@ -2,12 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Usuario
-    path('registro/', views.registro, name='registro'),
-    path('login/', views.iniciar_sesion, name='login'),
+    # Sesión
     path('logout/', views.cerrar_sesion, name='logout'),
+    path('perfil/', views.perfil, name='perfil'),
     path('eliminar_cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
-    path("perfil/", views.perfil, name="perfil"),
 
     # Tienda
     path('', views.inicio, name='inicio'),
@@ -18,15 +16,8 @@ urlpatterns = [
     path('producto/<int:producto_id>/', views.detalle_producto, name='detalle_producto'),
     path('productos/bajo-stock/', views.productos_bajo_stock, name='bajo_stock'),
 
-    # FINALIZAR COMPRA (nuevo)
+    # Compra
     path('finalizar_compra/', views.finalizar_compra, name='finalizar_compra'),
-
-    # Pago simulado (lo puedes borrar si ya no lo usarás)
     path('pago/<int:orden_id>/', views.pago_page, name='pago_page'),
     path('procesar_pago/<int:orden_id>/', views.procesar_pago, name='procesar_pago'),
 ]
-
-
-
-
-

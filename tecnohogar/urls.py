@@ -19,15 +19,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # Rutas de tu app tienda (inicio, carrito, registro, login, etc.)
+    path('usuarios/', include('usuarios.urls')),  # ESTA ES LA ÚNICA
     path('', include('tienda.urls')),
-
-    # Rutas internas de autenticación de Django (opcionales pero recomendadas)
-    path('accounts/', include('django.contrib.auth.urls')),
 ]
+
 
 # Para mostrar las imágenes subidas en modo desarrollo
 if settings.DEBUG:

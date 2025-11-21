@@ -1,9 +1,27 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="es">
 <head>
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Carrito - TecnoHogar</title>
     <style>
+        /* Ejemplo: para pantallas menores a 600px */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  nav {
+    display: block;
+  }
+}
+
         body { font-family: Arial, sans-serif; background-color: #f8f8f8; padding: 20px; }
         h1 { text-align: center; color: #0078D7; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }

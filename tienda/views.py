@@ -10,6 +10,9 @@ from .models import Producto, Orden, OrdenItem, Pago, Resena
 import uuid
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 
 
@@ -129,6 +132,7 @@ def ver_carrito(request):
 
 from django.contrib import messages
 
+@login_required
 def agregar_al_carrito(request, producto_id):
     carrito = request.session.get('carrito', {})
     producto = get_object_or_404(Producto, id=producto_id)
@@ -182,16 +186,6 @@ def eliminar_item(request, producto_id):
 # ---------------------------
 # USUARIO
 # ---------------------------
-def registro(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/login/')
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/register.html', {"form": form})
-
 
 def iniciar_sesion(request):
     if request.method == "POST":
@@ -203,7 +197,7 @@ def iniciar_sesion(request):
             return redirect("inicio")
         else:
             messages.error(request, "Usuario o contraseña incorrectos.")
-    return render(request, "registration/login.html")
+    return render(request, "usuarios/login.html")
 
 
 def cerrar_sesion(request):

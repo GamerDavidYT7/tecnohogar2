@@ -1,0 +1,110 @@
+/* ==========================
+   CONFIGURACIÓN GENERAL
+========================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* ==========================
+   CONTENEDORES RESPONSIVOS
+========================== */
+.container {
+    width: 100%;
+    max-width: 1200px;  /* ancho máximo en pantallas grandes */
+    margin: 0 auto;      /* centrar */
+    padding: 0 10px;     /* padding interno */
+}
+
+/* ==========================
+   IMÁGENES RESPONSIVAS
+========================== */
+img {
+    max-width: 100%;   /* nunca más ancho que el contenedor */
+    height: auto;      /* mantiene proporción */
+    display: block;
+}
+
+/* ==========================
+   BOTONES RESPONSIVOS
+========================== */
+button,
+input[type="submit"],
+a.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background-color: #0078D7;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:hover,
+input[type="submit"]:hover,
+a.button:hover {
+    background-color: #005ea2;
+}
+
+/* ==========================
+   TIPOGRAFÍA RESPONSIVA
+========================== */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+/* ==========================
+   MENÚS Y NAVEGACIÓN
+========================== */
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #0078D7;
+    padding: 8px 12px;
+}
+
+nav a:hover {
+    color: #005ea2;
+}
+
+/* ==========================
+   AJUSTES PARA PANTALLAS PEQUEÑAS
+========================== */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+
+    button,
+    input[type="submit"],
+    a.button {
+        width: 100%;       /* botones ocupan todo el ancho */
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;   /* fuente más pequeña para móviles */
+    }
+}

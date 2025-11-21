@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Iniciar sesión</title>
+<style>
+    /* Ejemplo: para pantallas menores a 600px */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  nav {
+    display: block;
+  }
+}
+
+    body { font-family: Arial; background: #f0f4f8; padding: 40px; }
+    .card { max-width: 400px; margin: auto; background: #fff;
+            padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    input { width: 100%; padding: 10px; margin: 10px 0;
+            border-radius: 5px; border: 1px solid #ccc; }
+    button { width: 100%; padding: 10px; background: #0078D7;
+             color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #005bb5; }
+    h2 { text-align: center; }
+    .error { color: red; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Iniciar Sesión</h2>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Email:</label>
+        <input type="email" name="email" required>
+
+        <label>Contraseña:</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Entrar</button>
+    </form>
+</div>
+
+</body>
+</html>
+
